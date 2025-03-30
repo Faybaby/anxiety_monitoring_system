@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>职场焦虑体感模拟器</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .input-section {
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 14px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result-section {
+            margin-top: 30px;
+            display: none;
+        }
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+        .tab.active {
+            background-color: white;
+            border-color: #ddd;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background-color: white;
+            border-radius: 0 0 5px 5px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .image-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        .emotion-data {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .emotion-data h3 {
+            margin-top: 0;
+            color: #4CAF50;
+        }
+        .emotion-data p {
+            margin: 10px 0;
+        }
+        .emotion-data strong {
+            color: #333;
+        }
+        .loading {
+            text-align: center;
+            display: none;
+            margin: 20px 0;
+        }
+        .loading-spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #4CAF50;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #777;
+            font-size: 14px;
+        }
+        .tag {
+            display: inline-block;
+            background-color: #e0f7fa;
+            color: #006064;
+            padding: 3px 8px;
+            border-radius: 3px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            font-size: 12px;
+        }
+        .timeline-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .skill-badge {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>职场焦虑体感模拟器</h1>
+        <p>识别职场PUA，可视化情绪影响，学习健康应对</p>
+    </div>
+    
+    <div class="container">
+        <div class="input-section">
+            <h2>输入职场对话</h2>
+            <textarea id="pua-text" placeholder="请输入你在职场中遇到的PUA话语，例如：'你怎么连这么简单的事情都做不好？别人都能很快完成，就你这么慢，是不是不适合这个岗位？'"></textarea>
+            <div style="text-align: center; margin-top: 15px;">
+                <button id="analyze-btn">分析情绪影响</button>
+            </div>
+        </div>
+        
+        <div class="loading" id="loading">
+            <p>正在分析中，请稍候...</p>
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+    
+    <div class="result-section" id="result-section">
+        <div class="tabs">
+            <div class="tab active" data-tab="summary">情绪摘要</div>
+            <div class="tab" data-tab="heatmap">焦虑热力图</div>
+            <div class="tab" data-tab="emotion-curve">情绪曲线</div>
+            <div class="tab" data-tab="dialogue">对话对比</div>
+            <div class="tab" data-tab="progress">解压进度</div>
+        </div>
+        
+        <div class="tab-content active" id="summary">
+            <h2>情绪分析摘要</h2>
+            <div class="emotion-data" id="emotion-summary">
+                <!-- 情绪数据将在这里显示 -->
+            </div>
+        </div>
+        
+        <div class="tab-content" id="heatmap">
+            <h2>焦虑热力图</h2>
+            <p>此图展示了PUA话语对身体各部位的影响强度</p>
+            <div class="image-container">
+                <img id="heatmap-img" src="" alt="焦虑热力图">
+            </div>
+            <div id="body-reactions">
+                <!-- 身体反应详情将在这里显示 -->
+            </div>
+        </div>
+        
+        <div class="tab-content" id="emotion-curve">
+            <h2>情绪波动曲线</h2>
+            <p>此图展示了情绪随时间的变化轨迹</p>
+            <div class="image-container">
+                <img id="emotion-curve-img" src="" alt="情绪曲线图">
+            </div>
+            <div id="timeline-details">
+                <!-- 时间线详情将在这里显示 -->
+            </div>
+        </div>
+        
+        <div class="tab-content" id="dialogue">
+            <h2>对话对比分析</h2>
+            <p>此图对比了PUA话语与健康表达方式的差异</p>
+            <div class="image-container">
+                <img id="dialogue-comparison-img" src="" alt="对话对比图">
+            </div>
+        </div>
+        
+        <div class="tab-content" id="progress">
+            <h2>焦虑解压进度</h2>
+            <p>此图展示了你的情绪修复进度</p>
+            <div class="image-container">
+                <img id="progress-bar-img" src="" alt="解压进度条">
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>职场焦虑体感模拟器 © 2023 | 帮助职场人士识别PUA，缓解焦虑</p>
+    </div>
+
+    <script>
+        // 切换标签页
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // 移除所有标签页的active类
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // 添加active类到当前标签页
+                tab.classList.add('active');
+                document.getElementById(tab.getAttribute('data-tab')).classList.add('active');
+            });
+        });
+        
+        // 分析按钮点击事件
+        document.getElementById('analyze-btn').addEventListener('click', function() {
+            const puaText = document.getElementById('pua-text').value.trim();
+            if (!puaText) {
+                alert('请输入PUA话语');
+                return;
+            }
+            
+            // 显示加载中
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result-section').style.display = 'none';
+            
+            // 发送请求
+            const formData = new FormData();
+            formData.append('pua_text', puaText);
+            
+            fetch('/analyze', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // 隐藏加载中
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('result-section').style.display = 'block';
+                
+                // 显示情绪摘要
+                const emotionData = data.emotion_data;
+                const emotionSummary = document.getElementById('emotion-summary');
+                
+                let attackKeywords = '';
+                emotionData.attack_keywords.forEach(keyword => {
+                    attackKeywords += `<span class="tag">${keyword}</span>`;
+                });
+                
+                emotionSummary.innerHTML = `
+                    <h3>情绪分析</h3>
+                    <p><strong>攻击关键词：</strong> ${attackKeywords || '无'}</p>
+                    <p><strong>核心情绪：</strong> ${emotionData.emotion_tag || '未知'}</p>
+                    <p><strong>情绪强度：</strong> ${emotionData.affect_level}/10</p>
+                    <div class="reframe-section">
+                        <p><strong>健康表达替代：</strong></p>
+                        <p class="reframe-text">${emotionData.healthy_reframe || '无'}</p>
+                    </div>
+                    <div class="skill-section">
+                        <p><strong>情绪释放：</strong> ${emotionData.emotion_release.release_percent || 0}%</p>
+                        <p><strong>解锁技能：</strong> <span class="skill-badge">${emotionData.emotion_release.unlocked_skill || '无'}</span></p>
+                        <p><strong>成长提示：</strong> ${emotionData.emotion_release.level_up_msg || '无'}</p>
+                    </div>
+                `;
+                
+                // 显示身体反应
+                const bodyReactions = document.getElementById('body-reactions');
+                bodyReactions.innerHTML = `
+                    <h3>身体反应</h3>
+                    <p><strong>头部：</strong> ${emotionData.body_map.head || '无明显反应'}</p>
+                    <p><strong>胸部：</strong> ${emotionData.body_map.chest || '无明显反应'}</p>
+                    <p><strong>胃部：</strong> ${emotionData.body_map.stomach || '无明显反应'}</p>
+                `;
+                
+                // 显示时间线详情
+                const timelineDetails = document.getElementById('timeline-details');
+                let timelineHTML = '<h3>情绪时间线</h3>';
+                
+                emotionData.timeline.forEach(point => {
+                    const content = point.inner_voice || point.label || '';
+                    if (content) {
+                        timelineHTML += `
+                            <div class="timeline-item">
+                                <p><strong>时间点 ${point.time_index}：</strong> 情绪强度 ${point.emotion_value}/10</p>
+                                <p>${content}</p>
+                            </div>
+                        `;
+                    }
+                });
+                
+                timelineDetails.innerHTML = timelineHTML;
+                
+                // 显示图像
+                document.getElementById('heatmap-img').src = `data:image/png;base64,${data.heatmap}`;
+                document.getElementById('emotion-curve-img').src = `data:image/png;base64,${data.emotion_curve}`;
+                document.getElementById('dialogue-comparison-img').src = `data:image/png;base64,${data.dialogue_comparison}`;
+                document.getElementById('progress-bar-img').src = `data:image/png;base64,${data.progress_bar}`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('loading').style.display = 'none';
+                alert('分析过程中出现错误，请重试');
+            });
+        });
+    </script>
+</body>
+</html>
