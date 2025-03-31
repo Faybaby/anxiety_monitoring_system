@@ -5,235 +5,615 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>职场焦虑体感模拟器</title>
     <style>
+        /* 基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'Microsoft YaHei', sans-serif;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-            color: #333;
+            background-color: #0a0f2d; /* 主背景色：深蓝 */
+            color: #e4e8f7; /* 主文字颜色：明亮灰白 */
+            min-height: 100vh;
+            overflow-x: hidden;
         }
+        
         h1, h2, h3 {
-            color: #333;
+            color: #e4e8f7;
+            margin-bottom: 15px;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        .input-section {
-            margin-bottom: 20px;
-        }
-        textarea {
+        
+        /* 导航栏样式 */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 100px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            resize: vertical;
-            font-family: inherit;
-            font-size: 14px;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .result-section {
-            margin-top: 30px;
-            display: none;
-        }
-        .tabs {
+            height: 80px;
+            background-color: rgba(10, 10, 10, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1000;
             display: flex;
-            border-bottom: 1px solid #ddd;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-link {
+            color: #e4e8f7;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 10px 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #00ffe3;
+            transform: scale(1.05);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ffe3, transparent);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Hero区样式 */
+        .hero {
+            padding: 120px 20px 60px;
+            text-align: center;
+            background: linear-gradient(135deg, #0a0f2d, #1f0f38);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(0, 255, 227, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
             margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeIn 1s forwards 0.5s;
         }
-        .tab {
-            padding: 10px 20px;
-            cursor: pointer;
-            border: 1px solid transparent;
-            border-bottom: none;
-            border-radius: 5px 5px 0 0;
-            margin-right: 5px;
+        
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeIn 1s forwards 1s;
         }
-        .tab.active {
-            background-color: white;
-            border-color: #ddd;
-            color: #4CAF50;
+        
+        .hero-btn {
+            background-color: #00ffe3;
+            color: #0a0f2d;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
             font-weight: bold;
-        }
-        .tab-content {
-            display: none;
-            padding: 20px;
-            background-color: white;
-            border-radius: 0 0 5px 5px;
-        }
-        .tab-content.active {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeIn 1s forwards 1.5s;
+            margin: 0 auto;
             display: block;
         }
-        .image-container {
+        
+        .hero-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 255, 227, 0.5);
+        }
+        
+        /* 主容器样式 */
+        .main-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            background-color: #1a1d2f; /* 卡片背景色：深蓝灰 */
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeIn 0.5s ease-out;
+            width: 100%;
+        }
+        
+        /* 输入区域样式 - 重新设计 */
+        .input-section {
+            margin-bottom: 30px;
+            width: 100%;
             text-align: center;
-            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .image-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        
+        .chat-input-container {
+            position: relative;
+            margin: 20px auto;
+            width: 100%;
+            max-width: 800px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
         }
-        .emotion-data {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
+        
+        .chat-input-container:hover {
+            box-shadow: 0 8px 25px rgba(0, 255, 227, 0.2);
+            transform: translateY(-3px);
         }
-        .emotion-data h3 {
-            margin-top: 0;
-            color: #4CAF50;
+        
+        .input-decoration {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #00ffe3, #4effb5, #00ffe3);
+            background-size: 200% 100%;
+            animation: gradientMove 3s ease infinite;
         }
-        .emotion-data p {
-            margin: 10px 0;
+        
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-        .emotion-data strong {
-            color: #333;
+        
+        textarea {
+            width: 100%;
+            height: 180px;
+            padding: 20px;
+            background-color: #2b2f44;
+            color: #e4e8f7;
+            border: none;
+            border-radius: 15px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 15px;
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            text-align: justify;
         }
+        
+        textarea:focus {
+            outline: none;
+            background-color: #323750;
+        }
+        
+        .button-container {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #00ffe3, #4effb5);
+            color: #0a0f2d;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0, 255, 227, 0.3);
+        }
+        
+        button:hover {
+            background: linear-gradient(135deg, #00e6cc, #3dffaa);
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 255, 227, 0.4);
+        }
+        
+        .btn-icon {
+            font-size: 18px;
+        }
+        
+        /* 加载动画样式 */
         .loading {
             text-align: center;
             display: none;
-            margin: 20px 0;
+            margin: 30px 0;
         }
+        
         .loading-spinner {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #4CAF50;
+            border: 5px solid #2b2f44;
+            border-top: 5px solid #00ffe3;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             animation: spin 2s linear infinite;
             margin: 0 auto;
         }
+        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            color: #777;
-            font-size: 14px;
+        
+        /* 结果区域样式 */
+        .result-section {
+            margin-top: 40px;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+            width: 100%;
+            background-color: #1a1d2f;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            padding-bottom: 30px;
         }
+        
+        /* 标签页样式 */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #2b2f44;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #00ffe3 #2b2f44;
+            padding: 0 15px;
+        }
+        
+        .tab {
+            padding: 12px 25px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 10px 10px 0 0;
+            margin-right: 5px;
+            color: #e4e8f7;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .tab:hover {
+            color: #00ffe3;
+        }
+        
+        .tab.active {
+            background-color: #1a1d2f;
+            border-color: #2b2f44;
+            color: #00ffe3;
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 25px;
+            background-color: #1a1d2f;
+            border-radius: 0 0 10px 10px;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* 图像容器样式 */
+        .image-container {
+            text-align: center;
+            margin: 25px 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .image-container:hover {
+            transform: scale(1.02);
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* 情绪数据样式 */
+        .emotion-data {
+            background-color: #2b2f44;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            transition: transform 0.3s ease;
+        }
+        
+        .emotion-data:hover {
+            transform: translateY(-5px);
+        }
+        
+        .emotion-data h3 {
+            margin-top: 0;
+            color: #00ffe3;
+            border-bottom: 1px solid #3d4159;
+            padding-bottom: 10px;
+        }
+        
+        .emotion-data p {
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+        
+        .emotion-data strong {
+            color: #e4e8f7;
+        }
+        
+        /* 标签样式 */
         .tag {
             display: inline-block;
-            background-color: #e0f7fa;
-            color: #006064;
-            padding: 3px 8px;
-            border-radius: 3px;
-            margin-right: 5px;
-            margin-bottom: 5px;
-            font-size: 12px;
-        }
-        .timeline-item {
-            margin-bottom: 10px;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-        }
-        .skill-badge {
-            background-color: #e8f5e9;
-            color: #2e7d32;
+            background-color: rgba(255, 78, 92, 0.2); /* 情绪攻击提示色 */
+            color: #ff4e5c;
             padding: 5px 10px;
+            border-radius: 5px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+        
+        .tag:hover {
+            background-color: rgba(255, 78, 92, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        /* 时间线项目样式 */
+        .timeline-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #2b2f44;
+            border-left: 3px solid #ff9a3e; /* 情绪曲线高点色 */
+            border-radius: 0 10px 10px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 技能徽章样式 */
+        .skill-badge {
+            background-color: rgba(0, 255, 227, 0.2);
+            color: #00ffe3;
+            padding: 6px 12px;
             border-radius: 20px;
             display: inline-block;
-            margin-top: 5px;
+            margin-top: 8px;
             font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .skill-badge:hover {
+            background-color: rgba(0, 255, 227, 0.3);
+            transform: scale(1.05);
+        }
+        
+        /* 健康表达替代样式 */
+        .reframe-text {
+            color: #4effb5; /* 健康替代说法的绿色 */
+            font-style: italic;
+            line-height: 1.6;
+            padding: 10px;
+            border-left: 3px solid #4effb5;
+            margin: 15px 0;
+        }
+        
+        /* 页脚样式 */
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px 0;
+            color: #a0a8c0;
+            font-size: 14px;
+            border-top: 1px solid #2b2f44;
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab {
+                flex: 1 1 auto;
+                text-align: center;
+                font-size: 13px;
+                padding: 10px 15px;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 16px;
+            }
+            
+            .main-container {
+                width: 95%; /* 在小屏幕上稍微扩大一点 */
+            }
+        }
+        
+        @media (min-width: 769px) and (max-width: 1200px) {
+            .main-container {
+                width: 90%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .container {
+                margin-bottom: 30px;
+                width: 100%;
+            }
+            
+            .result-section {
+                width: 100%;
+            }
+        }
+        
+        @media (min-width: 1201px) {
+            .main-container {
+                width: 90%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .container {
+                margin-bottom: 30px;
+                width: 100%;
+            }
+            
+            .result-section {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>职场焦虑体感模拟器</h1>
-        <p>识别职场PUA，可视化情绪影响，学习健康应对</p>
-    </div>
-    
-    <div class="container">
-        <div class="input-section">
-            <h2>输入职场对话</h2>
-            <textarea id="pua-text" placeholder="请输入你在职场中遇到的PUA话语，例如：'你怎么连这么简单的事情都做不好？别人都能很快完成，就你这么慢，是不是不适合这个岗位？'"></textarea>
-            <div style="text-align: center; margin-top: 15px;">
-                <button id="analyze-btn">分析情绪影响</button>
-            </div>
-        </div>
-        
-        <div class="loading" id="loading">
-            <p>正在分析中，请稍候...</p>
-            <div class="loading-spinner"></div>
+    <!-- 导航栏 -->
+    <div class="nav-bar">
+        <div class="nav-links">
+            <a href="#heatmap" class="nav-link">焦虑热力图</a>
+            <a href="#emotion-curve" class="nav-link">情绪曲线</a>
+            <a href="#dialogue" class="nav-link">对话对比</a>
+            <a href="#progress" class="nav-link">情绪进度</a>
         </div>
     </div>
     
-    <div class="result-section" id="result-section">
-        <div class="tabs">
-            <div class="tab active" data-tab="summary">情绪摘要</div>
-            <div class="tab" data-tab="heatmap">焦虑热力图</div>
-            <div class="tab" data-tab="emotion-curve">情绪曲线</div>
-            <div class="tab" data-tab="dialogue">对话对比</div>
-            <div class="tab" data-tab="progress">解压进度</div>
-        </div>
-        
-        <div class="tab-content active" id="summary">
-            <h2>情绪分析摘要</h2>
-            <div class="emotion-data" id="emotion-summary">
-                <!-- 情绪数据将在这里显示 -->
+    <!-- Hero区 -->
+    <div class="hero">
+        <h1>你的情绪，可以被看见</h1>
+        <p>输入一段职场对话，看看它在你身体里留下了什么</p>
+        <button class="hero-btn" id="scroll-to-input">开启情绪映射</button>
+    </div>
+    
+    <div class="main-container">
+        <div class="container">
+            <div class="input-section">
+                <h2>输入职场对话</h2>
+                <div class="chat-input-container">
+                    <textarea id="pua-text" placeholder="请输入你在职场中遇到的PUA话语，例如：'你怎么连这么简单的事情都做不好？别人都能很快完成，就你这么慢，是不是不适合这个岗位？'"></textarea>
+                    <div class="input-decoration"></div>
+                </div>
+                <div class="button-container">
+                    <button id="analyze-btn">
+                        <span class="btn-icon">✨</span>
+                        <span class="btn-text">分析情绪影响</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="loading" id="loading">
+                <p>正在分析中，请稍候...</p>
+                <div class="loading-spinner"></div>
             </div>
         </div>
         
-        <div class="tab-content" id="heatmap">
-            <h2>焦虑热力图</h2>
-            <p>此图展示了PUA话语对身体各部位的影响强度</p>
-            <div class="image-container">
-                <img id="heatmap-img" src="" alt="焦虑热力图">
+        <div class="result-section" id="result-section">
+            <div class="tabs">
+                <div class="tab active" data-tab="summary">情绪摘要</div>
+                <div class="tab" data-tab="heatmap">焦虑热力图</div>
+                <div class="tab" data-tab="emotion-curve">情绪曲线</div>
+                <div class="tab" data-tab="dialogue">对话对比</div>
+                <div class="tab" data-tab="progress">解压进度</div>
             </div>
-            <div id="body-reactions">
-                <!-- 身体反应详情将在这里显示 -->
+            
+            <div class="tab-content active" id="summary">
+                <h2>情绪分析摘要</h2>
+                <div class="emotion-data" id="emotion-summary">
+                    <!-- 情绪数据将在这里显示 -->
+                </div>
             </div>
-        </div>
-        
-        <div class="tab-content" id="emotion-curve">
-            <h2>情绪波动曲线</h2>
-            <p>此图展示了情绪随时间的变化轨迹</p>
-            <div class="image-container">
-                <img id="emotion-curve-img" src="" alt="情绪曲线图">
+            
+            <div class="tab-content" id="heatmap">
+                <h2>焦虑热力图</h2>
+                <p>此图展示了PUA话语对身体各部位的影响强度</p>
+                <div class="image-container">
+                    <img id="heatmap-img" src="" alt="焦虑热力图">
+                </div>
+                <div id="body-reactions">
+                    <!-- 身体反应详情将在这里显示 -->
+                </div>
             </div>
-            <div id="timeline-details">
-                <!-- 时间线详情将在这里显示 -->
+            
+            <div class="tab-content" id="emotion-curve">
+                <h2>情绪波动曲线</h2>
+                <p>此图展示了情绪随时间的变化轨迹</p>
+                <div class="image-container">
+                    <img id="emotion-curve-img" src="" alt="情绪曲线图">
+                </div>
+                <div id="timeline-details">
+                    <!-- 时间线详情将在这里显示 -->
+                </div>
             </div>
-        </div>
-        
-        <div class="tab-content" id="dialogue">
-            <h2>对话对比分析</h2>
-            <p>此图对比了PUA话语与健康表达方式的差异</p>
-            <div class="image-container">
-                <img id="dialogue-comparison-img" src="" alt="对话对比图">
+            
+            <div class="tab-content" id="dialogue">
+                <h2>对话对比分析</h2>
+                <p>此图对比了PUA话语与健康表达方式的差异</p>
+                <div class="image-container">
+                    <img id="dialogue-comparison-img" src="" alt="对话对比图">
+                </div>
             </div>
-        </div>
-        
-        <div class="tab-content" id="progress">
-            <h2>焦虑解压进度</h2>
-            <p>此图展示了你的情绪修复进度</p>
-            <div class="image-container">
-                <img id="progress-bar-img" src="" alt="解压进度条">
+            
+            <div class="tab-content" id="progress">
+                <h2>焦虑解压进度</h2>
+                <p>此图展示了你的情绪修复进度</p>
+                <div class="image-container">
+                    <img id="progress-bar-img" src="" alt="解压进度条">
+                </div>
             </div>
         </div>
     </div>
@@ -243,6 +623,11 @@
     </div>
 
     <script>
+        // 滚动到输入区域
+        document.getElementById('scroll-to-input').addEventListener('click', function() {
+            document.querySelector('.input-section').scrollIntoView({ behavior: 'smooth' });
+        });
+        
         // 切换标签页
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener('click', () => {
@@ -253,6 +638,27 @@
                 // 添加active类到当前标签页
                 tab.classList.add('active');
                 document.getElementById(tab.getAttribute('data-tab')).classList.add('active');
+            });
+        });
+        
+        // 导航链接点击事件
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const tabId = this.getAttribute('href').substring(1);
+                
+                // 显示结果区域
+                document.getElementById('result-section').style.display = 'block';
+                
+                // 激活对应的标签
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+                
+                // 滚动到结果区域
+                document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
             });
         });
         
@@ -301,9 +707,10 @@
                         <p class="reframe-text">${emotionData.healthy_reframe || '无'}</p>
                     </div>
                     <div class="skill-section">
-                        <p><strong>情绪释放：</strong> ${emotionData.emotion_release.release_percent || 0}%</p>
+                        <p><strong>回复建议：</strong> <span class="recommended-reply">${emotionData.emotion_release.recommended_reply || '无可用的推荐回复'}</span></p>
                         <p><strong>解锁技能：</strong> <span class="skill-badge">${emotionData.emotion_release.unlocked_skill || '无'}</span></p>
-                        <p><strong>成长提示：</strong> ${emotionData.emotion_release.level_up_msg || '无'}</p>
+                        <p><strong>情绪释放：</strong> ${emotionData.emotion_release.release_percent || 0}%</p>
+                       <p><strong>成长提示：</strong> ${emotionData.emotion_release.level_up_msg || '无'}</p>          
                     </div>
                 `;
                 
@@ -314,6 +721,13 @@
                     <p><strong>头部：</strong> ${emotionData.body_map.head || '无明显反应'}</p>
                     <p><strong>胸部：</strong> ${emotionData.body_map.chest || '无明显反应'}</p>
                     <p><strong>胃部：</strong> ${emotionData.body_map.stomach || '无明显反应'}</p>
+                    <p><strong>颈部：</strong> ${emotionData.body_map.neck || '无明显反应'}</p>
+                    <p><strong>背部：</strong> ${emotionData.body_map.back || '无明显反应'}</p>
+                    <p><strong>手部：</strong> ${emotionData.body_map.hands || '无明显反应'}</p>
+                    <p><strong>腿部：</strong> ${emotionData.body_map.legs || '无明显反应'}</p>
+                    <p><strong>面部：</strong> ${emotionData.body_map.face || '无明显反应'}</p>
+                    <p><strong>心脏：</strong> ${emotionData.body_map.heart || '无明显反应'}</p>
+                    <p><strong>腹部：</strong> ${emotionData.body_map.abdomen || '无明显反应'}</p>
                 `;
                 
                 // 显示时间线详情
@@ -334,11 +748,51 @@
                 
                 timelineDetails.innerHTML = timelineHTML;
                 
-                // 显示图像
-                document.getElementById('heatmap-img').src = `data:image/png;base64,${data.heatmap}`;
-                document.getElementById('emotion-curve-img').src = `data:image/png;base64,${data.emotion_curve}`;
-                document.getElementById('dialogue-comparison-img').src = `data:image/png;base64,${data.dialogue_comparison}`;
-                document.getElementById('progress-bar-img').src = `data:image/png;base64,${data.progress_bar}`;
+                // 显示图像 - 修复图像加载问题
+                if (data.heatmap) {
+                    document.getElementById('heatmap-img').src = `data:image/png;base64,${data.heatmap}`;
+                }
+                if (data.emotion_curve) {
+                    document.getElementById('emotion-curve-img').src = `data:image/png;base64,${data.emotion_curve}`;
+                }
+                if (data.dialogue_comparison) {
+                    document.getElementById('dialogue-comparison-img').src = `data:image/png;base64,${data.dialogue_comparison}`;
+                }
+                if (data.progress_bar) {
+                    const progressImg = document.getElementById('progress-bar-img');
+                    progressImg.src = `data:image/png;base64,${data.progress_bar}`;
+                    progressImg.onload = function() {
+                        console.log("进度条图像加载成功");
+                    };
+                    progressImg.onerror = function() {
+                        console.error("进度条图像加载失败");
+                        // 尝试重新加载
+                        setTimeout(() => {
+                            progressImg.src = `data:image/png;base64,${data.progress_bar}`;
+                        }, 500);
+                    };
+                }
+                
+                // 添加专门用于检查进度条标签页的函数
+                function checkProgressTab() {
+                    const progressTab = document.querySelector('.tab[data-tab="progress"]');
+                    progressTab.addEventListener('click', function() {
+                        console.log("进度条标签页被点击");
+                        // 确保进度条图像可见
+                        const progressImg = document.getElementById('progress-bar-img');
+                        if (progressImg.src && !progressImg.complete) {
+                            progressImg.src = `data:image/png;base64,${data.progress_bar}`;
+                        }
+                    });
+                }
+                
+                // 调用检查函数
+                checkProgressTab();
+                
+                // 确保所有图像加载完成后再滚动到结果区域
+                setTimeout(() => {
+                    document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
+                }, 300);
             })
             .catch(error => {
                 console.error('Error:', error);

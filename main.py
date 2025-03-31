@@ -37,28 +37,20 @@ class WorkplaceAnxietySimulator:
 
         标记情绪类型（emotion_tag）：分析语言所激发的核心情绪，如羞耻、内疚、恐惧、无力。
 
-        标记身体感应区域（body_map）：结合情绪类型对应生理反应部位，如羞耻感集中在头部，恐惧感集中在胃部。("head": "头痛、面部潮红、发热、头晕",
-  "chest": "胸口沉重、呼吸急促、心跳加速",
-  "stomach": "恶心、空虚、胃部紧张",
-  "neck": "脖部僵硬、肩膀紧绷、压迫感",
-  "back": "背部紧张、脊柱不适、感到压迫",
-  "hands": "手心出汗、手指紧握、手指颤抖",
-  "legs": "腿部麻木、沉重、无法站立",
-  "face": "面部潮红、面部紧绷、表情僵硬",
-  "heart": "心跳加速、心悸、胸部压迫感",
-  "abdomen": "腹部紧绷、空虚、胃翻腾")
+        标记身体感应区域（body_map）：结合情绪类型对应生理反应部位，如羞耻感集中在头部，恐惧感集中在胃部。
+        ("head": "头痛、面部潮红、发热、头晕", "chest": "胸口沉重、呼吸急促、心跳加速","stomach": "恶心、空虚、胃部紧张","neck": "脖部僵硬、肩膀紧绷、压迫感","back": "背部紧张、脊柱不适、感到压迫","hands": "手心出汗、手指紧握、手指颤抖","legs": "腿部麻木、沉重、无法站立","face": "面部潮红、面部紧绷、表情僵硬","heart": "心跳加速、心悸、胸部压迫感","abdomen": "腹部紧绷、空虚、胃翻腾")
 
         评估情绪强度等级（1-10）affect_level：综合语言攻击程度与情绪反应判断其强度。
 
-        构建情绪时间曲线（timeline）：模拟对话进行中的情绪波动轨迹，最多5个时间节点，每个节点包括：时间点、情绪值、内在声音或标签。
+        构建情绪时间曲线（timeline）：模拟对话进行中的情绪波动轨迹，最多5个时间节点，每个节点包括：时间点、情绪值、内在声音（标签）。
 
-        提出健康表达替代（healthy_reframe）：将攻击性语句转换为有建设性、非暴力沟通形式。
+        提出健康表达替代（healthy_reframe）：改写原句中不健康的表达，将用户输入的攻击性语句【x = a (批评或威胁) + b (情绪化的归因) + c (控制性需求)】改写称有建设性、非暴力沟通的健康表达【y = a' (客观观察) + b' (自我感受) + c' (内在需求) + d (具体请求)】
 
-        输出情绪释放反馈（emotion_release）：评估释放度、反击策略进化、情绪成长提示。
+        输出情绪释放反馈（emotion_release）："recommended_reply": 用向上管理公式【x=a+b+c+d】为用户提供优雅的反击话术例如a:暴露弱点与“无关痛痒的求助”+b:强化对方价值与捧杀+c:情感转移与请求帮助的智慧引导+d:轻描淡写的态度与灵活回旋空间,level_up_msg:给出情绪成长提示,unlocked_skill:解锁的新技能,release_percent:反击后的情绪释放度。
         
         分析以下对话："{}"
         
-        请以JSON格式返回，不要有其他文字。格式如下：
+        请补全以下JSON格式的字符串的值。格式如下：
         {{
         "attack_keywords": [],
         "emotion_tag": "",
@@ -84,9 +76,11 @@ class WorkplaceAnxietySimulator:
         ],
         "healthy_reframe": "",
         "emotion_release": {{
-            "release_percent": 0,
+            "recommended_reply": "",
+            "level_up_msg": "",
             "unlocked_skill": "",
-            "level_up_msg": ""
+            "release_percent": 0
+           
         }}
         }}
         """.format(pua_text)
@@ -107,6 +101,7 @@ class WorkplaceAnxietySimulator:
         
         try:
             print(f"正在发送API请求到 {base_url}...")
+            print(f"请求数据: {json.dumps(data, ensure_ascii=False, indent=2)}")
             response = requests.post(f"{base_url}/chat/completions", headers=headers, json=data, timeout=30)
             
             # 打印响应状态和内容，帮助调试
@@ -119,6 +114,7 @@ class WorkplaceAnxietySimulator:
             
             result = response.json()
             print("API响应成功，正在解析结果...")
+            print(f"完整API响应: {json.dumps(result, ensure_ascii=False, indent=2)}")
             
             # 检查响应结构
             if "choices" not in result or len(result["choices"]) == 0:
@@ -126,13 +122,15 @@ class WorkplaceAnxietySimulator:
                 raise Exception("API响应格式异常，缺少choices字段")
             
             content = result["choices"][0]["message"]["content"]
-            print(f"API返回内容: {content[:100]}...")  # 打印前100个字符
+            print(f"API返回内容前100字符: {content[:100]}...")
+            print(f"完整返回内容:\n{content}")
             
             # 尝试解析JSON
             try:
                 analysis = json.loads(content)
                 self.emotion_data = analysis
                 print("成功解析JSON结果")
+                print(f"解析后的JSON数据: {json.dumps(analysis, ensure_ascii=False, indent=2)}")
                 return analysis
             except json.JSONDecodeError as e:
                 print(f"JSON解析错误: {str(e)}")
@@ -146,13 +144,15 @@ class WorkplaceAnxietySimulator:
                     
                     if json_start >= 0 and json_end > json_start:
                         json_str = content[json_start:json_end]
-                        print(f"提取的JSON字符串: {json_str[:100]}...")  # 打印前100个字符
+                        print(f"提取的JSON字符串前100字符: {json_str[:100]}...")
+                        print(f"完整提取的JSON字符串:\n{json_str}")
                         
                         # 尝试修复常见的JSON格式问题
                         # 1. 替换单引号为双引号
                         json_str = json_str.replace("'", '"')
                         # 2. 确保布尔值和null是小写的
                         json_str = json_str.replace("True", "true").replace("False", "false").replace("None", "null")
+                        print(f"修复后的JSON字符串:\n{json_str}")
                         
                         # 再次尝试解析
                         analysis = json.loads(json_str)
@@ -172,10 +172,12 @@ class WorkplaceAnxietySimulator:
                     matches = re.findall(pattern, content)
                     if matches:
                         json_str = matches[0]
-                        print(f"通过正则表达式提取的JSON: {json_str[:100]}...")
+                        print(f"通过正则表达式提取的JSON前100字符: {json_str[:100]}...")
+                        print(f"完整正则提取的JSON:\n{json_str}")
                         
                         # 尝试修复常见的JSON格式问题
                         json_str = json_str.replace("'", '"').replace("True", "true").replace("False", "false").replace("None", "null")
+                        print(f"正则提取后修复的JSON:\n{json_str}")
                         
                         # 再次尝试解析
                         analysis = json.loads(json_str)
@@ -575,16 +577,22 @@ class WorkplaceAnxietySimulator:
         return lines
     
     def generate_progress_bar(self):
-        """生成解压进度条"""
+        """生成焦虑解压进度条"""
         if not self.emotion_data:
+            print("没有情绪数据，无法生成进度条")
             return None
             
+        # 导入textwrap模块用于文本换行
+        import textwrap
+            
         emotion_release = self.emotion_data.get("emotion_release", {})
+        recommended_reply = emotion_release.get("recommended_reply", "无法生成推荐回复")
         release_percent = emotion_release.get("release_percent", 50)
         unlocked_skill = emotion_release.get("unlocked_skill", "无反击技能")
         level_up_msg = emotion_release.get("level_up_msg", "继续努力")
         
-        img = Image.new('RGB', (600, 300), color='white')
+        # 创建画布
+        img = Image.new('RGB', (600, 400), color='white')  # 增加高度以容纳更多文本
         draw = ImageDraw.Draw(img)
         
         # 获取字体
@@ -605,29 +613,55 @@ class WorkplaceAnxietySimulator:
         draw.text((275, 95), f"{release_percent}%", fill="black", font=font_title)
         
         # 添加解锁技能
-        draw.text((50, 150), "解锁技能:", fill="blue", font=font_title)
-        draw.text((70, 180), f"• {unlocked_skill}", fill="black", font=font)
+        draw.text((50, 140), "解锁技能:", fill="blue", font=font_title)
+        draw.text((70, 165), f"• {unlocked_skill}", fill="black", font=font)
+        
+        # 添加回复建议
+        draw.text((50, 200), "回复建议:", fill="green", font=font_title)
+        
+        # 处理回复建议文本换行
+        try:
+            # 使用self.emotion_data而不是emotion_data
+            wrapped_reply = textwrap.fill(recommended_reply, width=40)
+            y_position = 225
+            for line in wrapped_reply.split('\n'):
+                draw.text((70, y_position), f"• {line}", fill="black", font=font)
+                y_position += 25
+        except Exception as e:
+            print(f"处理回复建议文本失败: {str(e)}")
+            draw.text((70, 225), "• 无法显示回复建议", fill="black", font=font)
+            y_position = 250
         
         # 添加升级信息
-        draw.text((50, 220), "成长提示:", fill="purple", font=font_title)
+        draw.text((50, y_position + 10), "成长提示:", fill="purple", font=font_title)
         
-        # 文本换行处理
-        lines = self._wrap_text(level_up_msg, font, 500)
-        
-        y_position = 250
-        for line in lines:
-            draw.text((70, y_position), line, fill="black", font=font)
-            y_position += 25  # 使用更大的行间距
+        # 处理成长提示文本换行
+        try:
+            wrapped_msg = textwrap.fill(level_up_msg, width=40)
+            y_position += 35
+            for line in wrapped_msg.split('\n'):
+                draw.text((70, y_position), f"• {line}", fill="black", font=font)
+                y_position += 25
+        except Exception as e:
+            print(f"处理成长提示文本失败: {str(e)}")
+            draw.text((70, y_position + 35), "• 无法显示成长提示", fill="black", font=font)
         
         return img
     
     def process_input(self, pua_text):
         """处理用户输入，生成分析结果和可视化图像"""
         try:
+            print(f"\n===== 开始处理用户输入 =====")
+            print(f"输入文本: {pua_text}")
+            
             # 分析文本
+            print(f"\n----- 开始文本分析 -----")
             analysis = self.analyze_text(pua_text)
+            print(f"----- 文本分析完成 -----")
+            print(f"分析结果: {json.dumps(analysis, ensure_ascii=False, indent=2)}")
             
             # 生成图像
+            print(f"\n----- 开始生成可视化图像 -----")
             try:
                 heatmap = self.generate_heatmap()
             except Exception as e:

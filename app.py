@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, jsonify
 import base64
 import io
+import traceback
+from PIL import Image, ImageDraw
 from main import WorkplaceAnxietySimulator
 
 app = Flask(__name__)
@@ -57,6 +59,10 @@ def analyze():
         print(f"分析请求处理失败: {str(e)}")
         traceback.print_exc()
         return jsonify({"error": f"处理请求时发生错误: {str(e)}"}), 500
+
+@app.route('/about')
+def about():
+    return render_template('about.html')  # 返回一个 HTML 模板
 
 if __name__ == '__main__':
     app.run(debug=True)

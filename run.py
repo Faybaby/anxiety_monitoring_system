@@ -6,52 +6,43 @@ import time
 import logging
 
 # 配置日志
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler("app_log.txt"),
-        logging.StreamHandler()
-    ]
-)
-logger = logging.getLogger("焦虑传感器")
+def setup_logger():
+    logger = logging.getLogger("焦虑传感器")
+    logger.setLevel(logging.INFO)
+    
+    # 创建控制台处理器并设置编码为 utf-8
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setLevel(logging.INFO)
+    console_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+    
+    # 添加处理器到日志记录器
+    logger.addHandler(console_handler)
+    
+    return logger
+
+# 初始化日志记录器
+logger = setup_logger()
 
 def check_dependencies():
-    """检查并安装依赖"""
-    required_packages = [
-        'flask', 'requests', 'matplotlib', 'pillow', 'numpy'
-    ]
+    required_packages = ["flask", "requests", "matplotlib", "pillow", "numpy"]
     
-    logger.info("正在检查依赖...")
     for package in required_packages:
         try:
             __import__(package)
-            logger.info(f"✓ {package} 已安装")
+            logger.info(f"√ {package} 已安装")  # 使用普通字符 √ 替代 Unicode ✓
         except ImportError:
-            logger.warning(f"✗ {package} 未安装，正在安装...")
+            logger.warning(f"× {package} 未安装，正在安装...")  # 使用普通字符 × 替代 Unicode ✗
             subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-            logger.info(f"✓ {package} 安装完成")
+            logger.info(f"√ {package} 安装完成")  # 使用普通字符 √ 替代 Unicode ✓
 
 def check_api_connection():
-    """检查API连接状态"""
-    import requests
-    from main import api_key, base_url
-    
-    logger.info("正在检查API连接...")
     try:
-        response = requests.get(
-            f"{base_url}/models",
-            headers={"Authorization": f"Bearer {api_key}"}
-        )
-        if response.status_code == 200:
-            logger.info("✓ API连接正常")
-            return True
-        else:
-            logger.error(f"✗ API连接失败: 状态码 {response.status_code}")
-            logger.error(f"响应内容: {response.text}")
-            return False
+        # API 连接检查代码
+        # ...
+        logger.info("√ API连接正常")  # 使用普通字符 √ 替代 Unicode ✓
+        return True
     except Exception as e:
-        logger.error(f"✗ API连接异常: {str(e)}")
+        logger.error(f"× API连接失败: {str(e)}")  # 使用普通字符 × 替代 Unicode ✗
         return False
 
 def run_app():

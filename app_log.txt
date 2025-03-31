@@ -12,3 +12,61 @@
 2025-03-30 23:33:59,678 - werkzeug - INFO - 127.0.0.1 - - [30/Mar/2025 23:33:59] "POST /analyze HTTP/1.1" 200 -
 2025-03-30 23:34:10,756 - werkzeug - INFO - 127.0.0.1 - - [30/Mar/2025 23:34:10] "POST /analyze HTTP/1.1" 200 -
 2025-03-30 23:36:39,600 - werkzeug - INFO - 127.0.0.1 - - [30/Mar/2025 23:36:39] "POST /analyze HTTP/1.1" 200 -
+2025-03-31 11:28:47,651 - ½¹ÂÇ´«¸ÐÆ÷ - INFO - ÕýÔÚ¼ì²éÒÀÀµ...
+2025-03-31 11:28:49,917 - ½¹ÂÇ´«¸ÐÆ÷ - INFO - 
+ÕýÔÚÆô¶¯Ö°³¡½¹ÂÇÌå¸ÐÄ£ÄâÆ÷...
+2025-03-31 11:28:50,235 - ½¹ÂÇ´«¸ÐÆ÷ - INFO - ÕýÔÚ¼ì²éAPIÁ¬½Ó...
+2025-03-31 11:28:51,288 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-31 11:28:51,288 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-31 11:28:53,106 - ½¹ÂÇ´«¸ÐÆ÷ - INFO - ÒÑÔÚä¯ÀÀÆ÷ÖÐ´ò¿ªÓ¦ÓÃ
+2025-03-31 11:28:53,182 - werkzeug - INFO - 127.0.0.1 - - [31/Mar/2025 11:28:53] "GET / HTTP/1.1" 200 -
+2025-03-31 11:28:54,270 - werkzeug - INFO - 127.0.0.1 - - [31/Mar/2025 11:28:54] "GET / HTTP/1.1" 200 -
+2025-03-31 11:29:25,794 - werkzeug - INFO - 127.0.0.1 - - [31/Mar/2025 11:29:25] "POST /analyze HTTP/1.1" 200 -
+2025-03-31 11:31:19,371 - werkzeug - INFO - 127.0.0.1 - - [31/Mar/2025 11:31:19] "GET /?ide_webview_request_time=1743391879363 HTTP/1.1" 200 -
+2025-03-31 11:31:29,671 - werkzeug - INFO - 127.0.0.1 - - [31/Mar/2025 11:31:29] "POST /analyze HTTP/1.1" 200 -
+2025-03-31 11:55:20,379 - ½¹ÂÇ´«¸ÐÆ÷ - INFO - ÕýÔÚ¼ì²éÒÀÀµ...
+2025-03-31 11:55:23,201 - ½¹ÂÇ´«¸ÐÆ÷ - INFO - 
+ÕýÔÚÆô¶¯Ö°³¡½¹ÂÇÌå¸ÐÄ£ÄâÆ÷...
+2025-03-31 11:55:23,500 - ½¹ÂÇ´«¸ÐÆ÷ - INFO - ÕýÔÚ¼ì²éAPIÁ¬½Ó...
+2025-03-31 11:55:24,502 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-31 11:55:24,503 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-31 11:55:26,513 - ½¹ÂÇ´«¸ÐÆ÷ - INFO - ÒÑÔÚä¯ÀÀÆ÷ÖÐ´ò¿ªÓ¦ÓÃ
+2025-03-31 11:55:26,659 - werkzeug - INFO - 127.0.0.1 - - [31/Mar/2025 11:55:26] "GET / HTTP/1.1" 200 -
+2025-03-31 11:55:26,859 - werkzeug - INFO - 127.0.0.1 - - [31/Mar/2025 11:55:26] "GET /?ide_webview_request_time=1743393326843 HTTP/1.1" 200 -
+2025-03-31 11:55:27,796 - werkzeug - INFO - 127.0.0.1 - - [31/Mar/2025 11:55:27] "GET / HTTP/1.1" 200 -
+2025-03-31 11:55:39,164 - werkzeug - INFO - 127.0.0.1 - - [31/Mar/2025 11:55:39] "POST /analyze HTTP/1.1" 200 -
+2025-03-31 12:00:39,505 - werkzeug - INFO - 127.0.0.1 - - [31/Mar/2025 12:00:39] "POST /analyze HTTP/1.1" 200 -
+2025-03-31 12:01:07,945 - ½¹ÂÇ´«¸ÐÆ÷ - INFO - ÕýÔÚ¼ì²éÒÀÀµ...
+2025-03-31 12:01:10,776 - ½¹ÂÇ´«¸ÐÆ÷ - INFO - 
+ÕýÔÚÆô¶¯Ö°³¡½¹ÂÇÌå¸ÐÄ£ÄâÆ÷...
+2025-03-31 12:01:11,078 - ½¹ÂÇ´«¸ÐÆ÷ - INFO - ÕýÔÚ¼ì²éAPIÁ¬½Ó...
+2025-03-31 12:01:12,009 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-31 12:01:12,015 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-31 12:01:14,042 - ½¹ÂÇ´«¸ÐÆ÷ - INFO - ÒÑÔÚä¯ÀÀÆ÷ÖÐ´ò¿ªÓ¦ÓÃ
+2025-03-31 12:01:14,192 - werkzeug - INFO - 127.0.0.1 - - [31/Mar/2025 12:01:14] "GET / HTTP/1.1" 200 -
+2025-03-31 12:01:14,428 - werkzeug - INFO - 127.0.0.1 - - [31/Mar/2025 12:01:14] "GET /?ide_webview_request_time=1743393674419 HTTP/1.1" 200 -
+2025-03-31 12:01:15,306 - werkzeug - INFO - 127.0.0.1 - - [31/Mar/2025 12:01:15] "GET / HTTP/1.1" 200 -
+2025-03-31 12:01:22,324 - werkzeug - INFO - 127.0.0.1 - - [31/Mar/2025 12:01:22] "POST /analyze HTTP/1.1" 200 -
+2025-03-31 12:02:53,572 - werkzeug - INFO - 127.0.0.1 - - [31/Mar/2025 12:02:53] "POST /analyze HTTP/1.1" 200 -
+2025-03-31 12:04:11,889 - werkzeug - INFO - 127.0.0.1 - - [31/Mar/2025 12:04:11] "POST /analyze HTTP/1.1" 200 -
+2025-03-31 20:57:05,752 - werkzeug - INFO - 127.0.0.1 - - [31/Mar/2025 20:57:05] "GET /?ide_webview_request_time=1743425825696 HTTP/1.1" 200 -
+2025-03-31 20:57:08,726 - werkzeug - INFO - 127.0.0.1 - - [31/Mar/2025 20:57:08] "GET /?ide_webview_request_time=1743425828686 HTTP/1.1" 200 -
+2025-03-31 21:52:15,269 - ½¹ÂÇ´«¸ÐÆ÷ - INFO - ÕýÔÚ¼ì²éÒÀÀµ...
+2025-03-31 21:52:31,231 - ½¹ÂÇ´«¸ÐÆ÷ - INFO - 
+ÕýÔÚÆô¶¯Ö°³¡½¹ÂÇÌå¸ÐÄ£ÄâÆ÷...
+2025-03-31 21:52:34,329 - ½¹ÂÇ´«¸ÐÆ÷ - INFO - ÕýÔÚ¼ì²éAPIÁ¬½Ó...
+2025-03-31 21:52:35,306 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-31 21:52:35,307 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-31 21:52:37,927 - ½¹ÂÇ´«¸ÐÆ÷ - INFO - ÒÑÔÚä¯ÀÀÆ÷ÖÐ´ò¿ªÓ¦ÓÃ
+2025-03-31 22:02:43,772 - ½¹ÂÇ´«¸ÐÆ÷ - INFO - ÕýÔÚ¼ì²éÒÀÀµ...
+2025-03-31 22:03:03,608 - ½¹ÂÇ´«¸ÐÆ÷ - INFO - 
+ÕýÔÚÆô¶¯Ö°³¡½¹ÂÇÌå¸ÐÄ£ÄâÆ÷...
+2025-03-31 22:03:06,630 - ½¹ÂÇ´«¸ÐÆ÷ - INFO - ÕýÔÚ¼ì²éAPIÁ¬½Ó...
+2025-03-31 22:03:10,163 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-31 22:03:10,215 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-31 22:03:12,839 - ½¹ÂÇ´«¸ÐÆ÷ - INFO - ÒÑÔÚä¯ÀÀÆ÷ÖÐ´ò¿ªÓ¦ÓÃ
