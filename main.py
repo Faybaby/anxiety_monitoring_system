@@ -8,17 +8,22 @@ import io
 import base64
 import traceback  # 添加这一行
 
-# API配置
-# api_key = "sk-bWWNDfwuOrM0Rw1fhzjN1GUrgBn2o4y2ajEfK8I9wG4PNw5K"
-# base_url = "https://api.chatanywhere.tech/v1"
+# 导入心理阴影面积计算器
+from shadow_area_calculator import ShadowAreaCalculator
 
-api_key = "sk-yhyHIS4iiJzWq46g669fAf3b885440E0Ab3174317e585bC6"
-base_url = "https://api.1lm.me/v1"
+# API配置
+api_key = "sk-bWWNDfwuOrM0Rw1fhzjN1GUrgBn2o4y2ajEfK8I9wG4PNw5K"
+base_url = "https://api.chatanywhere.tech/v1"
+
+# api_key = "sk-yhyHIS4iiJzWq46g669fAf3b885440E0Ab3174317e585bC6"
+# base_url = "https://api.1lm.me/v1"
 
 class WorkplaceAnxietySimulator:
     def __init__(self):
         self.emotion_data = None
-        
+        # 初始化心理阴影面积计算器
+        self.shadow_calculator = ShadowAreaCalculator()
+    
     def analyze_text(self, pua_text):
         """分析用户输入的PUA文本，提取情绪数据"""
         prompt = """
@@ -26,8 +31,10 @@ class WorkplaceAnxietySimulator:
         请直接精细化完成该核心任务——分析对话是否包含职场PUA语言并提取情绪响应字段对json字符串中的空字段进行赋值。
         执行任务步骤：
         方法论：
-        采用【语言攻击识别 + 情绪认知评估 + 身体感应映射 + 情绪时间线建模 + 表达替换 + 情绪释放反馈】六维分析框架，结合心理学非暴力沟通（NVC）、情绪聚焦疗法（EFT）与身体感知疗法（Somatic Experiencing）进行系统评估。
+        采用【语言攻击识别 + 情绪认知评估 + 身体感应映射 + 情绪时间线建模 + 健康表达替换 + 情绪释放反馈】六维分析框架，结合心理学非暴力沟通（NVC）、情绪聚焦疗法（EFT）与身体感知疗法（Somatic Experiencing）进行系统评估。
         方法论执行步骤：
+        健康表达对照（healthy_reframe）：逐字修改用户输入的对话原句，
+        例如对话原句："你别给脸不要脸!别逼我在世界上最快乐的地方扇你！" healthy_reframe："亲爱的,我给你准备了一个台阶下，因为我不想在这世上最美好的地方做出不礼貌的事~"
 
         识别语言攻击词汇（attack_keywords）：提取对话中包含的压迫、贬低、操控等词句。
 
@@ -40,9 +47,11 @@ class WorkplaceAnxietySimulator:
 
         构建情绪时间曲线（timeline）：模拟对话进行中的情绪波动轨迹，最多5个时间节点，每个节点包括：时间点、情绪值、内在声音（标签）。
 
-        提出健康表达替代（healthy_reframe）：逐字重写用户输入对话，逐句对原对话中攻击性表达进行纠错。（攻击性表达定义：批评威胁+情绪化归因+控制性需求，健康表达定义：客观观察+自我感受+内在需求+具体请求)
-
-        输出情绪释放反馈（emotion_release）：recommended_reply=采用向上管理公式的反击话术（向上管理公式：暴露弱点与“无关痛痒的求助”+强化对方价值与捧杀+情感转移与请求帮助的智慧引导+轻描淡写的态度与灵活回旋空间）,level_up_msg=成长提示,unlocked_skill=解锁的新技能,release_percent=反击后的情绪释放度。
+        输出情绪释放反馈（emotion_release）：
+        recommended_reply=向上管理的反击话术（向上管理公式：暴露弱点与“无关痛痒的求助”+强化对方价值与捧杀+情感转移与请求帮助的智慧引导+轻描淡写的态度与灵活回旋空间）,
+        level_up_msg=高能成长提示,
+        unlocked_skill=新技能标签,
+        release_percent=反击后情绪释放度。
         
         请补全以下JSON字符串的字段值,完成赋值任务：
         {{
@@ -463,22 +472,7 @@ class WorkplaceAnxietySimulator:
         img = Image.open(buf)
         return img
     
-    def _get_chinese_font(self, size=12):
-        """获取支持中文的字体"""
-        try:
-            # 尝试使用matplotlib内置的中文字体
-            from matplotlib.font_manager import FontProperties
-            return FontProperties(fname="C:/Windows/Fonts/simhei.ttf", size=size)
-        except:
-            # 如果找不到指定字体，尝试其他常见中文字体
-            try:
-                return FontProperties(fname="C:/Windows/Fonts/simsun.ttc", size=size)
-            except:
-                try:
-                    return FontProperties(fname="C:/Windows/Fonts/msyh.ttc", size=size)
-                except:
-                    # 如果都找不到，使用系统默认字体
-                    return FontProperties(size=size)
+   
     
     def generate_dialogue_comparison(self, original_text):
         """生成对话双轨对比图"""
@@ -683,12 +677,20 @@ class WorkplaceAnxietySimulator:
                 traceback.print_exc()
                 progress_bar = None
             
+            try:
+                shadow_area_viz = self.generate_shadow_area_visualization()
+            except Exception as e:
+                print(f"生成心理阴影面积可视化失败: {str(e)}")
+                traceback.print_exc()
+                shadow_area_viz = None
+            
             return {
                 "analysis": analysis,
                 "heatmap": heatmap,
                 "emotion_curve": emotion_curve,
                 "dialogue_comparison": dialogue_comparison,
-                "progress_bar": progress_bar
+                "progress_bar": progress_bar,
+                "shadow_area_viz": shadow_area_viz
             }
         except Exception as e:
             print(f"处理输入失败: {str(e)}")
@@ -699,7 +701,8 @@ class WorkplaceAnxietySimulator:
                 "heatmap": None,
                 "emotion_curve": None,
                 "dialogue_comparison": None,
-                "progress_bar": None
+                "progress_bar": None,
+                "shadow_area_viz": None
             }
 
 # 测试代码
@@ -720,5 +723,9 @@ if __name__ == "__main__":
     result["emotion_curve"].save("emotion_curve.png")
     result["dialogue_comparison"].save("dialogue_comparison.png")
     result["progress_bar"].save("progress_bar.png")
+    if result["shadow_area_viz"]:
+        result["shadow_area_viz"].save("shadow_area.png")
+        print("心理阴影面积图像已保存")
     
     print("图像已保存到当前目录")
+     
